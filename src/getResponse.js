@@ -1,20 +1,23 @@
 const { convertToCase } = require('./convertToCase');
 const { getErrors } = require('./getErrors');
 
-const getResponseBody = (textToConvert, targetCase) => {
+const getResponse = (textToConvert, targetCase) => {
   const errors = getErrors(textToConvert, targetCase);
 
   if (errors.length) {
-    return { errors };
+    return { code: 400, data: { errors } };
   }
 
   const convertedResult = convertToCase(textToConvert, targetCase);
 
   return {
-    ...convertedResult,
-    originalText: textToConvert,
-    targetCase,
+    code: 200,
+    data: {
+      ...convertedResult,
+      originalText: textToConvert,
+      targetCase,
+    },
   };
 };
 
-exports.getResponseBody = getResponseBody;
+exports.getResponse = getResponse;

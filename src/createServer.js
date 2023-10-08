@@ -1,16 +1,18 @@
 const http = require('http');
 
 const { getParams } = require('./getParams');
-const { getResponseBody } = require('./getResponseBody');
+const { getResponse } = require('./getResponse');
 
 const createServer = () => {
   const server = http.createServer((req, res) => {
     res.setHeader('Content-type', 'application/json');
 
     const params = getParams(req.url);
-    const body = getResponseBody(...params);
+    const { code, data } = getResponse(...params);
 
-    res.end(JSON.stringify(body));
+    res.statusCode = code;
+
+    res.end(JSON.stringify(data));
   });
 
   return server;
